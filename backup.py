@@ -17,9 +17,11 @@ class GetSecret():
 
         # client.set_secret("secretName", "secretValue")
         try:
-            retrieved_secret = client.get_secret("reformMgmtF5Internal-password")
+            retrieved_secret = client.get_secret(self.secret_name)
         except ResourceNotFoundError:
             print("Key not found, please double check")
         else:
             print(retrieved_secret.name)
             print(retrieved_secret.value)
+
+GetSecret("reformMgmtF5Internal-password")
