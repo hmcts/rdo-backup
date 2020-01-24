@@ -14,23 +14,29 @@ class F5():
         # Connect to the BigIP
         bigip = ManagementRoot("localhost", self.username, self.password, port=5556, verify=False)
 
+        # Get current date and time
+        current_date = str(date.today())
+        
         # Obtain Hostname, use regex to ignore the DNS name
         settings = bigip.tm.sys.global_settings.load()
         hostname = settings.hostname
         hostname_clean = re.compile('[a-zA-Z,\d\_\-]+')
         hostname_clean = hostname_clean.findall(hostname)
-
-        # Get current date and time
-        current_date = str(date.today())
-
+        hostname_clean[0] = hostname_clean[0] + "-" + current_date
+     
         # Create a new UCS file with the current date and hostname as the filename
-        bigip.tm.sys.ucs.exec_cmd('save', name=f'{hostname_clean[0]}-{current_date}.ucs')
+        bigip.tm.sys.ucs.exec_cmd('save', name=f'{hostname_clean[0]}.ucs')
 
+        #Delete created UCS Archive
+        bigip.tm.util.bash.exec_cmd('run', utilCmdArgs=f'-c "rm /var/local/ucs/{hostname_clean[0]}.ucs"')
+ 
         # Get a list of all the UCS files on the F5s local storage
         ucs = bigip.tm.sys.ucs.load()
         items = ucs.items
+        
         for item in items:
             print(item["apiRawValues"]["filename"])
+
 
         
 f5_username = GetSecret("tactical-f5-user").secret_value
