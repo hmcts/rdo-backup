@@ -27,5 +27,5 @@ steps:
   inputs:
     scriptSource: 'filePath'
     scriptPath: f5_backup.py
-    arguments: --KEY_VAULT_NAME $(test)
+    arguments: --KEY_VAULT_NAME $(KEY_VAULT_NAME)
     workingDirectory: $(Build.ArtifactStagingDirectory)
