@@ -21,7 +21,7 @@ class F5():
 
         try:
             # Connect to the BigIP
-            self.mgmt = ManagementRoot("localhost", self.username, self.password, port=5556, verify=False)
+            self.mgmt = ManagementRoot("172.16.15.254", self.username, self.password, port=8443, verify=False)
 
         except iControlUnexpectedHTTPError:
             print(f"Failed to login to the F5 appliance, please verify your credentials.")
