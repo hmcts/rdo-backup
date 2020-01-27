@@ -1,6 +1,7 @@
 import os
 from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient
 from azure.core.exceptions import ResourceExistsError, ResourceNotFoundError
+from variables import Parser
 
 class UploadToBlob():
     """This class is used to interact with Azure Storage Accounts"""
@@ -8,6 +9,7 @@ class UploadToBlob():
     def __init__(self):
         """This function sets up the connection to the Azure storage container"""
 
+        Parser.sum(self)
         self.container_name = self.args.AZURE_STORAGE_CONTAINER_NAME
         self.connect_str = self.args.AZURE_STORAGE_CONNECTION_STRING
         self.blob_service_client = BlobServiceClient.from_connection_string(self.connect_str)
