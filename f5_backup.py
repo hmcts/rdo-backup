@@ -19,31 +19,33 @@ class F5():
 
     def connect_to_f5(self):
         """This function creates connects to the F5 appliance using the F5 SDK"""
+        devices = ["172.16.15.254", "10.47.15.250"]
 
-        try:
-            # Connect to the BigIP
-            self.mgmt = ManagementRoot("172.16.15.254", self.username, self.password, port=8443, verify=False)
+        for device in devices:
+            try:
+                # Connect to the BigIP
+                self.mgmt = ManagementRoot(device, self.username, self.password, port=8443, verify=False)
 
-        except iControlUnexpectedHTTPError:
-            print(f"Failed to login to the F5 appliance, please verify your credentials.")
+            except iControlUnexpectedHTTPError:
+                print(f"Failed to login to the F5 appliance, please verify your credentials.")
 
-        except ConnectionError:
-            print(f"Failed to communicate with the F5 appliance, please verify connectivity.")
+            except ConnectionError:
+                print(f"Failed to communicate with the F5 appliance, please verify connectivity.")
 
-        else:
-            # Get current date and time
-            current_date = str(date.today())
-            yesterdays_date = str(date.today() - timedelta(1))
+            else:
+                # Get current date and time
+                current_date = str(date.today())
+                yesterdays_date = str(date.today() - timedelta(1))
 
-            # Obtain Hostname, use regex to ignore the DNS name
-            settings = self.mgmt.tm.sys.global_settings.load()
-            hostname = settings.hostname
-            hostname_clean = re.compile('[a-zA-Z,\d\_\-]+')
-            self.hostname_clean = hostname_clean.findall(hostname)
-            self.hostname = self.hostname_clean[0] + "-" + current_date
-            self.yesterdays_file = self.hostname_clean[0] + "-" + yesterdays_date
-            print(f"Successfully logged into {self.hostname_clean[0]}.\n")
-            F5.create_and_download_file(self)            
+                # Obtain Hostname, use regex to ignore the DNS name
+                settings = self.mgmt.tm.sys.global_settings.load()
+                hostname = settings.hostname
+                hostname_clean = re.compile('[a-zA-Z,\d\_\-]+')
+                self.hostname_clean = hostname_clean.findall(hostname)
+                self.hostname = self.hostname_clean[0] + "-" + current_date
+                self.yesterdays_file = self.hostname_clean[0] + "-" + yesterdays_date
+                print(f"Successfully logged into {self.hostname_clean[0]}.\n")
+                F5.create_and_download_file(self)            
         
     def create_and_download_file(self):
         """This function creates a UCS archive on an F5 and downloads it locally"""
