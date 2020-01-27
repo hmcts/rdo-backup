@@ -19,7 +19,7 @@ class F5():
 
     def connect_to_f5(self):
         """This function creates connects to the F5 appliance using the F5 SDK"""
-        devices = ["172.16.15.254", "10.47.15.250"]
+        devices = ["172.31.254.254", "172.16.15.254", "10.47.15.250", "10.29.0.254", "10.31.15.250", "10.31.15.252", "10.45.0.254", "10.47.15.252"]
 
         for device in devices:
             try:
@@ -44,7 +44,9 @@ class F5():
                 self.hostname_clean = hostname_clean.findall(hostname)
                 self.hostname = self.hostname_clean[0] + "-" + current_date
                 self.yesterdays_file = self.hostname_clean[0] + "-" + yesterdays_date
-                print(f"Successfully logged into {self.hostname_clean[0]}.\n")
+                print("-----------------------------------------------------")
+                print(f"\nSuccessfully logged into {self.hostname_clean[0]}.\n")
+                print("-----------------------------------------------------")
                 F5.create_and_download_file(self)            
         
     def create_and_download_file(self):
