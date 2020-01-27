@@ -7,16 +7,16 @@ pr:
 pool:
     name: rdo-backup-prod
     vmImage: Ubuntu-18.04
-strategy:
-  matrix:
-    Python37:
-      python.version: '3.7'
+# strategy:
+#   matrix:
+#     Python37:
+#       python.version: '3.7'
 
-steps:
-- task: UsePythonVersion@0
-  inputs:
-    versionSpec: '$(python.version)'
-  displayName: 'Use Python $(python.version)'
+# steps:
+# - task: UsePythonVersion@0
+#   inputs:
+#     versionSpec: '$(python.version)'
+#   displayName: 'Use Python $(python.version)'
 
 - task: PythonScript@0
   inputs:
