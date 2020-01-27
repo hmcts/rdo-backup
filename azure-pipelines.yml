@@ -19,6 +19,7 @@ pool:
 #     versionSpec: '$(python.version)'
 #   displayName: 'Use Python $(python.version)'
 
+steps:
 - task: PythonScript@0
   inputs:
     scriptSource: 'filePath'
