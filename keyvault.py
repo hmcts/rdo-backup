@@ -1,5 +1,4 @@
 import os
-import argparse 
 from azure.keyvault.secrets import SecretClient
 from azure.identity import DefaultAzureCredential
 from azure.core.exceptions import ResourceNotFoundError
@@ -24,7 +23,4 @@ class GetSecret():
             exit(0)
         else:
             self.secret_value = retrieved_secret.value
-    
-    def parse_argument():
-       parse = argparse.ArgumentParser(description="Test")
-       parse.add_parameter("KEY_VAULT_NAME")
+            
