@@ -22,8 +22,8 @@ steps:
 
 - task: PythonScript@0
   displayName: Execute Python script
-  env: 
-    KEY_VAULT_NAME: $(KEY_VAULT_NAME)
+  #env: 
+   # KEY_VAULT_NAME: $(KEY_VAULT_NAME)
   inputs:
     scriptSource: 'filePath'
     scriptPath: f5_backup.py
