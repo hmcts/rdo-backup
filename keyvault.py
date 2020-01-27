@@ -18,12 +18,14 @@ class GetSecret():
         parser.add_argument("--AZURE_CLIENT_ID")
         parser.add_argument("--AZURE_CLIENT_SECRET")
         parser.add_argument("--AZURE_TENANT_ID")
+        parser.add_argument("--AZURE_STORAGE_CONNECTION_STRING")
+        parser.add_argument("--AZURE_STORAGE_CONTAINER_NAME")
         args = parser.parse_args()
 
         os.environ["AZURE_CLIENT_ID"] = args.AZURE_CLIENT_ID
         os.environ["AZURE_CLIENT_SECRET"] = args.AZURE_CLIENT_SECRET
         os.environ["AZURE_TENANT_ID"] = args.AZURE_TENANT_ID
-        
+
         key_vault_name = args.KEY_VAULT_NAME
         kv_uri = f"https://{key_vault_name}.vault.azure.net"
         credential = DefaultAzureCredential()
