@@ -2,13 +2,15 @@ import re
 import os
 from datetime import date, timedelta
 from f5.bigip import ManagementRoot
+from icontrol.exceptions import iControlUnexpectedHTTPError
+from requests import ConnectionError
 from keyvault import GetSecret
 from upload_to_blob import UploadToBlob
 
 class F5():
     """This class is used to interact with an F5 appliance"""
 
-    def __init__(self, username, password):
+    def __init__(self, username, password, hostname=""):
         """Initializes the F5 class"""
         self.username = username
         self.password = password
@@ -17,35 +19,44 @@ class F5():
     def connect_to_f5(self):
         """This function creates connects to the F5 appliance using the F5 SDK"""
 
-        # Connect to the BigIP
-        self.mgmt = ManagementRoot("localhost", self.username, self.password, port=5556, verify=False)
+        try:
+            # Connect to the BigIP
+            self.mgmt = ManagementRoot("localhost", self.username, self.password, port=5556, verify=False)
 
-        # Get current date and time
-        current_date = str(date.today())
-        yesterdays_date = str(date.today() - timedelta(1))
+        except iControlUnexpectedHTTPError:
+            print(f"Failed to login to the F5 appliance, please verify your credentials.")
 
-        # Obtain Hostname, use regex to ignore the DNS name
-        settings = self.mgmt.tm.sys.global_settings.load()
-        hostname = settings.hostname
-        hostname_clean = re.compile('[a-zA-Z,\d\_\-]+')
-        hostname_clean = hostname_clean.findall(hostname)
-        self.hostname = hostname_clean[0] + "-" + current_date
-        self.yesterdays_file = hostname_clean[0] + "-" + yesterdays_date
-        F5.create_and_download_file(self)
+        except ConnectionError:
+            print(f"Failed to communicate with the F5 appliance, please verify connectivity.")
 
+        else:
+            # Get current date and time
+            current_date = str(date.today())
+            yesterdays_date = str(date.today() - timedelta(1))
+
+            # Obtain Hostname, use regex to ignore the DNS name
+            settings = self.mgmt.tm.sys.global_settings.load()
+            hostname = settings.hostname
+            hostname_clean = re.compile('[a-zA-Z,\d\_\-]+')
+            self.hostname_clean = hostname_clean.findall(hostname)
+            self.hostname = self.hostname_clean[0] + "-" + current_date
+            self.yesterdays_file = self.hostname_clean[0] + "-" + yesterdays_date
+            print(f"Successfully logged into {self.hostname_clean[0]}.\n")
+            F5.create_and_download_file(self)            
+        
     def create_and_download_file(self):
-        """This function creates a UCS archive on an F5 downloads it locally"""
+        """This function creates a UCS archive on an F5 and downloads it locally"""
 
         # Create a new UCS file with the current date and hostname as the filename
         self.mgmt.tm.sys.ucs.exec_cmd('save', name=f'{self.hostname}.ucs')
-        print(f"Creating a new UCS archive on the F5 appliance...")
+        print(f"Creating a new UCS archive on {self.hostname_clean[0]}...")
         print(f"UCS archive {self.hostname}.ucs has been created.\n")
 
-        # Get a list of all the UCS files on the F5s local storage
+        # Display a list of all the UCS files on the F5s local storage
         ucs = self.mgmt.tm.sys.ucs.load()
         items = ucs.items
 
-        print("Current UCS archive files stored on the F5 appliance:\n--")
+        print(f"Current UCS archive files stored on {self.hostname_clean[0]}:\n--")
         for item in items:
             print(item["apiRawValues"]["filename"])
 
@@ -71,7 +82,7 @@ class F5():
     
         print(f"\nPerforming clean up activities...")
         UploadToBlob.delete_file(UploadToBlob(), f"{self.yesterdays_file}.ucs")
-        print(f"UCS archive {self.yesterdays_file}.ucs has been deleted from the F5 appliance")
+        print(f"UCS archive {self.yesterdays_file}.ucs has been deleted from {self.hostname_clean[0]}")
         print(f"UCS archive {self.hostname}.ucs has been deleted from local storage.\n")
 
 F5_USERNAME = GetSecret("tactical-f5-user").secret_value

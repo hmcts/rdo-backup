@@ -1,4 +1,4 @@
-import os, uuid
+import os
 from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient
 from azure.core.exceptions import ResourceExistsError, ResourceNotFoundError
 
@@ -6,7 +6,7 @@ class UploadToBlob():
     """This class is used to interact with Azure Storage Accounts"""
 
     def __init__(self):
-        """This function uploads files to an Azure Storage Container blob"""
+        """This function sets up the connection to the Azure storage container"""
 
         self.container_name = os.getenv('AZURE_STORAGE_CONTAINER_NAME')
         self.connect_str = os.getenv('AZURE_STORAGE_CONNECTION_STRING')

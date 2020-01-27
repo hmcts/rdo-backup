@@ -19,6 +19,7 @@ class GetSecret():
         try:
             retrieved_secret = client.get_secret(self.secret_name)
         except ResourceNotFoundError:
-            print("Key not found, please double check")
+            print("Key not found, please verify that the key names are correct")
+            exit(0)
         else:
             self.secret_value = retrieved_secret.value
