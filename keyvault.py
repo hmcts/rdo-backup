@@ -13,6 +13,10 @@ class GetSecret():
         self.secret_name = secret_name
         self.secret_value = secret_value
 
+        os.environ["AZURE_CLIENT_ID"] = args.AZURE_CLIENT_ID
+        os.environ["AZURE_CLIENT_SECRET"] = args.AZURE_CLIENT_SECRET
+        os.environ["AZURE_TENANT_ID"] = args.AZURE_TENANT_ID
+
         parser = argparse.ArgumentParser()
         parser.add_argument("--KEY_VAULT_NAME")
         parser.add_argument("--AZURE_CLIENT_ID")
