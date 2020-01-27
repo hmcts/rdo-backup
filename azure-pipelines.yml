@@ -5,6 +5,9 @@ trigger:
 pr:
 - master
 
+variables:
+  AZURE_KEY_VAULT: '$(AZURE_KEY_VAULT)'
+
 pool:
     name: rdo-backup-prod
     vmImage: Ubuntu-18.04
