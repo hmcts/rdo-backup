@@ -25,5 +25,5 @@ steps:
   inputs:
     scriptSource: 'filePath'
     scriptPath: f5_backup.py
-    argument: '"$(AZURE_KEY_VAULT)"'
+    argument: '"$(env1)"'
     workingDirectory: $(Build.ArtifactStagingDirectory)
