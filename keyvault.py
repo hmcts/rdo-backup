@@ -14,9 +14,9 @@ class GetSecret():
         self.secret_value = secret_value
 
         parser = argparse.ArgumentParser()
-        parser.add_argument("--KEY_VAULT_NAME", "--AZURE_CLIENT_ID", "--AZURE_CLIENT_SECRET", "--AZURE_TENANT_ID"")
+        parser.add_argument("--KEY_VAULT_NAME", "--AZURE_CLIENT_ID", "--AZURE_CLIENT_SECRET", "--AZURE_TENANT_ID")
         args = parser.parse_args()
-        
+
         key_vault_name = args.KEY_VAULT_NAME
         kv_uri = f"https://{key_vault_name}.vault.azure.net"
         credential = DefaultAzureCredential()
