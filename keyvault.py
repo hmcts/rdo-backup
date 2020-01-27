@@ -1,4 +1,5 @@
 import os
+import argparse
 from azure.keyvault.secrets import SecretClient
 from azure.identity import DefaultAzureCredential
 from azure.core.exceptions import ResourceNotFoundError
@@ -10,6 +11,11 @@ class GetSecret():
         """This function retrieves a secret from an Azure Key Vault"""
         self.secret_name = secret_name
         self.secret_value = secret_value
+
+        parser = argparse.ArgumentParser()
+        parser.add_argument("--KEY_VAULT_NAME", help="Provide the value of the key vault secret.")
+        args = parser.parse_args()
+        print ('Hello ', args.KEY_VAULT_NAME)
 
         key_vault_name = os.environ["KEY_VAULT_NAME"]
         kv_uri = f"https://{key_vault_name}.vault.azure.net"
@@ -24,3 +30,4 @@ class GetSecret():
         else:
             self.secret_value = retrieved_secret.value
             
+      
