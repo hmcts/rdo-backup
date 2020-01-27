@@ -14,6 +14,7 @@ class F5():
         """Initializes the F5 class"""
         self.username = username
         self.password = password
+
         F5.connect_to_f5(self)
 
     def connect_to_f5(self):

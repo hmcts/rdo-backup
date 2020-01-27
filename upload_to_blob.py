@@ -8,8 +8,8 @@ class UploadToBlob():
     def __init__(self):
         """This function sets up the connection to the Azure storage container"""
 
-        self.container_name = os.getenv('AZURE_STORAGE_CONTAINER_NAME')
-        self.connect_str = os.getenv('AZURE_STORAGE_CONNECTION_STRING')
+        self.container_name = self.args.AZURE_STORAGE_CONTAINER_NAME
+        self.connect_str = self.args.AZURE_STORAGE_CONNECTION_STRING
         self.blob_service_client = BlobServiceClient.from_connection_string(self.connect_str)
         self.container = self.blob_service_client.get_container_client(container=self.container_name)
         self.generator = self.container.list_blobs()
