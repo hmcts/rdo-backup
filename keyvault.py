@@ -11,7 +11,7 @@ class GetSecret():
         self.secret_name = secret_name
         self.secret_value = secret_value
 
-        key_vault_name = os.environ["KEY_VAULT_NAME"]
+        key_vault_name = $KEY_VAULT_NAME
         kv_uri = f"https://{key_vault_name}.vault.azure.net"
         credential = DefaultAzureCredential()
         client = SecretClient(vault_url=kv_uri, credential=credential)
