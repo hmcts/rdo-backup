@@ -71,7 +71,7 @@ class F5():
         """This function calls the UploadToBlob class to upload the UCS file to an Azure storage blob"""
 
         # Upload the file to an Azure Storage Blob using the UploadToBlob class.
-        UploadToBlob.upload_file(UploadToBlob(), f"{self.hostname}.ucs")
+        UploadToBlob.upload_file(UploadToBlob(self), f"{self.hostname}.ucs")
         F5.clean_up(self)
 
     def clean_up(self):
