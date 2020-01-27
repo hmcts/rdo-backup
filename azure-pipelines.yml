@@ -5,9 +5,6 @@ trigger:
 pr:
 - master
 
-# variables:
-#   AZURE_KEY_VAULT: '$(key_vault)'
-
 pool:
     name: rdo-backup-prod
     vmImage: Ubuntu-18.04
@@ -22,8 +19,6 @@ steps:
 
 - task: PythonScript@0
   displayName: Execute Python script
-  #env: 
-   # KEY_VAULT_NAME: $(KEY_VAULT_NAME)
   inputs:
     scriptSource: 'filePath'
     scriptPath: f5_backup.py

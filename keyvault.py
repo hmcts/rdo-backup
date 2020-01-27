@@ -16,9 +16,8 @@ class GetSecret():
         parser = argparse.ArgumentParser()
         parser.add_argument("--KEY_VAULT_NAME", help="Provide the value of the key vault secret.")
         args = parser.parse_args()
-        print ('Hello', args.KEY_VAULT_NAME)
 
-        key_vault_name = os.environ["KEY_VAULT_NAME"]
+        key_vault_name = args.KEY_VAULT_NAME
         kv_uri = f"https://{key_vault_name}.vault.azure.net"
         credential = DefaultAzureCredential()
         client = SecretClient(vault_url=kv_uri, credential=credential)
