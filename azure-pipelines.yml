@@ -6,7 +6,7 @@ pr:
 - master
 
 variables:
-  AZURE_KEY_VAULT: '$(AZURE_KEY_VAULT)'
+  env1: '$(AZURE_KEY_VAULT)'
 
 pool:
     name: rdo-backup-prod
@@ -25,5 +25,5 @@ steps:
   inputs:
     scriptSource: 'filePath'
     scriptPath: f5_backup.py
-    argument: -AZURE_KEY_VAULT $(AZURE_KEY_VAULT) 
+    argument: $(AZURE_KEY_VAULT) 
     workingDirectory: $(Build.ArtifactStagingDirectory)
