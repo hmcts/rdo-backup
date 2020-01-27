@@ -11,14 +11,15 @@ pool:
 
 steps:
 
-  - task: CopyFiles@1
-    displayName: Copy Python files
-    inputs:
-      contents: '**'
-      TargetFolder: $(Build.ArtifactStagingDirectory)
-      cleanTargetFolder: true
+- task: CopyFiles@1
+  displayName: Copy Python files
+  inputs:
+    contents: '**'
+    TargetFolder: $(Build.ArtifactStagingDirectory)
+    cleanTargetFolder: true
 
 - task: PythonScript@0
+  displayName: Execute Python script
   inputs:
     scriptSource: 'filePath'
     scriptPath: f5_backup.py
