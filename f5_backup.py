@@ -19,8 +19,10 @@ class F5():
 
     def connect_to_f5(self):
         """This function creates connects to the F5 appliance using the F5 SDK"""
+        
+        # Retrieve device list from a key vault secret and put them into a list
         devices = GetSecret("tactical-f5-list").secret_value
-
+        devices = devices.split(",")
         for device in devices:
             try:
                 # Connect to the BigIP
