@@ -19,7 +19,7 @@ class F5():
 
     def connect_to_f5(self):
         """This function creates connects to the F5 appliance using the F5 SDK"""
-        devices = ["172.31.254.254", "172.16.15.254", "10.47.15.250", "10.29.0.254", "10.31.15.250", "10.31.15.252", "10.45.0.254", "10.47.15.252"]
+        devices = GetSecret("tactical-f5-list").secret_value
 
         for device in devices:
             try:
