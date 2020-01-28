@@ -5,7 +5,7 @@ class Parser():
     def __init__(self):
         pass
     
-    def sum(self):
+    def parse_var(self):
         parser = argparse.ArgumentParser()
         parser.add_argument("--KEY_VAULT_NAME")
         parser.add_argument("--AZURE_CLIENT_ID")

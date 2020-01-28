@@ -44,9 +44,9 @@ class F5():
                 self.hostname_clean = hostname_clean.findall(hostname)
                 self.hostname = self.hostname_clean[0] + "-" + current_date
                 self.yesterdays_file = self.hostname_clean[0] + "-" + yesterdays_date
-                print("-----------------------------------------------------")
-                print(f"\nSuccessfully logged into {self.hostname_clean[0]}.\n")
-                print("-----------------------------------------------------")
+                print("\n-----------------------------------------------------")
+                print(f"Successfully logged into {self.hostname_clean[0]}.")
+                print("-----------------------------------------------------\n")
                 F5.create_and_download_file(self)            
         
     def create_and_download_file(self):

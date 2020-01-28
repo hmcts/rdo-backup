@@ -13,7 +13,7 @@ class GetSecret():
         """This function retrieves a secret from an Azure Key Vault"""
         self.secret_name = secret_name
         self.secret_value = secret_value
-        Parser.sum(self)
+        Parser.parse_var(self)
 
         key_vault_name = self.args.KEY_VAULT_NAME
         kv_uri = f"https://{key_vault_name}.vault.azure.net"
