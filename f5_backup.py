@@ -18,7 +18,12 @@ class F5():
 
     def connect_to_f5(self):
         """This function creates connects to the F5 appliance using the F5 SDK"""
-
+        
+        devices = GetSecret("tactical-f5-list").secret_value
+        devices = devices.split(",")
+        input(devices)
+        for device in devices:
+            input(device)
         try:
             # Connect to the BigIP
             self.mgmt = ManagementRoot("localhost", self.username, self.password, port=5556, verify=False)
