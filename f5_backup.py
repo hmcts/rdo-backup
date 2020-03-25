@@ -93,12 +93,12 @@ class F5():
         print(f"\nPerforming clean up activities...")
         ucs = self.mgmt.tm.sys.ucs.load()
         items = ucs.items
-        
+
         for item in items:
             if item["apiRawValues"]["filename"] != f"/var/local/ucs/{self.hostname}.ucs":
                 self.mgmt.tm.util.bash.exec_cmd('run', utilCmdArgs=f'-c "rm {item["apiRawValues"]["filename"]}"')
             
-                ucs_filename = re.compile('f\w.+')
+                ucs_filename = re.compile('^\/var\/local\/ucs\/')
                 ucs_filename = ucs_filename.findall(item["apiRawValues"]["filename"])
 
                 UploadToBlob.delete_file(UploadToBlob(), ucs_filename[0])
