@@ -6,6 +6,8 @@ from icontrol.exceptions import iControlUnexpectedHTTPError
 from requests import ConnectionError
 from keyvault import GetSecret
 from upload_to_blob import UploadToBlob
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 class F5():
     """This class is used to interact with an F5 appliance"""
@@ -45,7 +47,6 @@ class F5():
                 hostname_clean = re.compile('[a-zA-Z,\d\_\-]+')
                 self.hostname_clean = hostname_clean.findall(hostname)
                 self.hostname = self.hostname_clean[0] + "-" + current_date
-                self.yesterdays_file = self.hostname_clean[0] + "-" + yesterdays_date
                 print("\n-----------------------------------------------------")
                 print(f"Successfully logged into {self.hostname_clean[0]}.")
                 print("-----------------------------------------------------\n")
@@ -53,9 +54,14 @@ class F5():
         
     def create_and_download_file(self):
         """This function creates a UCS archive on an F5 and downloads it locally"""
-
+        try:
         # Create a new UCS file with the current date and hostname as the filename
-        self.mgmt.tm.sys.ucs.exec_cmd('save', name=f'{self.hostname}.ucs')
+            self.mgmt.tm.sys.ucs.exec_cmd('save', name=f'{self.hostname}.ucs')
+        # Dirty hack - Sometimes the UCS file is too big resulting in a Rest timeout error. So we are
+        # continuing after the event of a timeout error
+        except iControlUnexpectedHTTPError:
+            pass
+
         print(f"Creating a new UCS archive on {self.hostname_clean[0]}...")
         print(f"UCS archive {self.hostname}.ucs has been created.\n")
 
@@ -84,13 +90,22 @@ class F5():
         """This function performs clean up activities"""
 
         # Delete created UCS archive from the F5 appliance, from local storage and from the Azure storage blob.
-        self.mgmt.tm.util.bash.exec_cmd('run', utilCmdArgs=f'-c "rm /var/local/ucs/{self.yesterdays_file}.ucs"')
-        os.remove(f"{self.hostname}.ucs")
-    
         print(f"\nPerforming clean up activities...")
-        UploadToBlob.delete_file(UploadToBlob(), f"{self.yesterdays_file}.ucs")
-        print(f"UCS archive {self.yesterdays_file}.ucs has been deleted from {self.hostname_clean[0]}")
-        print(f"UCS archive {self.hostname}.ucs has been deleted from local storage.\n")
+        ucs = self.mgmt.tm.sys.ucs.load()
+        items = ucs.items
+        
+        for item in items:
+            if item["apiRawValues"]["filename"] != f"/var/local/ucs/{self.hostname}.ucs":
+                self.mgmt.tm.util.bash.exec_cmd('run', utilCmdArgs=f'-c "rm {item["apiRawValues"]["filename"]}"')
+            
+                ucs_filename = re.compile('f\w.+')
+                ucs_filename = ucs_filename.findall(item["apiRawValues"]["filename"])
+
+                UploadToBlob.delete_file(UploadToBlob(), ucs_filename[0])
+                print(f"UCS archive {item['apiRawValues']['filename']} has been deleted from {self.hostname_clean[0]}")
+                
+        print(f"UCS archive {self.hostname}.ucs has been deleted from local storage.\n")    
+        os.remove(f"{self.hostname}.ucs")
 
 F5_USERNAME = GetSecret("tactical-f5-user").secret_value
 F5_PASSWORD = GetSecret("tactical-f5-pw").secret_value
