@@ -98,7 +98,7 @@ class F5():
             if item["apiRawValues"]["filename"] != f"/var/local/ucs/{self.hostname}.ucs":
                 self.mgmt.tm.util.bash.exec_cmd('run', utilCmdArgs=f'-c "rm {item["apiRawValues"]["filename"]}"')
             
-                ucs_filename = re.compile('^\/var\/local\/ucs\/')
+                ucs_filename = re.compile('^\/var\/local\/ucs\/+')
                 ucs_filename = ucs_filename.findall(item["apiRawValues"]["filename"])
 
                 UploadToBlob.delete_file(UploadToBlob(), ucs_filename[0])
