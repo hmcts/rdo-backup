@@ -1,5 +1,6 @@
 import re
 import os
+import sys
 from datetime import date, timedelta
 from f5.bigip import ManagementRoot
 from icontrol.exceptions import iControlUnexpectedHTTPError
@@ -106,7 +107,7 @@ class F5():
                 
         print(f"UCS archive {self.hostname}.ucs has been deleted from local storage.\n")    
         os.remove(f"{self.hostname}.ucs")
-        thread.exit()
+        sys.exit()
 
 if __name__ == "__main__":
 
