@@ -7,6 +7,7 @@ from requests import ConnectionError
 from keyvault import GetSecret
 from upload_to_blob import UploadToBlob
 import urllib3
+import threading
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 class F5():
@@ -16,6 +17,7 @@ class F5():
         """Initializes the F5 class"""
         self.username = username
         self.password = password
+        self.hostname = hostname
 
         F5.connect_to_f5(self)
 
@@ -23,34 +25,32 @@ class F5():
         """This function creates connects to the F5 appliance using the F5 SDK"""
         
         # Retrieve device list from a key vault secret and put them into a list
-        devices = GetSecret("tactical-f5-list").secret_value
-        devices = devices.split(",")
-        for device in devices:
-            try:
-                # Connect to the BigIP
-                self.mgmt = ManagementRoot(device, self.username, self.password, port=8443, verify=False)
+    
+        try:
+            # Connect to the BigIP
+            self.mgmt = ManagementRoot(self.hostname, self.username, self.password, port=8443, verify=False)
 
-            except iControlUnexpectedHTTPError:
-                print(f"Failed to login to the F5 appliance, please verify your credentials.")
+        except iControlUnexpectedHTTPError:
+            print(f"Failed to login to the F5 appliance, please verify your credentials.")
 
-            except ConnectionError:
-                print(f"Failed to communicate with the F5 appliance, please verify connectivity.")
+        except ConnectionError:
+            print(f"Failed to communicate with the F5 appliance, please verify connectivity.")
 
-            else:
-                # Get current date and time
-                current_date = str(date.today())
-                yesterdays_date = str(date.today() - timedelta(1))
+        else:
+            # Get current date and time
+            current_date = str(date.today())
+            yesterdays_date = str(date.today() - timedelta(1))
 
-                # Obtain Hostname, use regex to ignore the DNS name
-                settings = self.mgmt.tm.sys.global_settings.load()
-                hostname = settings.hostname
-                hostname_clean = re.compile('[a-zA-Z,\d\_\-]+')
-                self.hostname_clean = hostname_clean.findall(hostname)
-                self.hostname = self.hostname_clean[0] + "-" + current_date
-                print("\n-----------------------------------------------------")
-                print(f"Successfully logged into {self.hostname_clean[0]}.")
-                print("-----------------------------------------------------\n")
-                F5.create_and_download_file(self)            
+            # Obtain Hostname, use regex to ignore the DNS name
+            settings = self.mgmt.tm.sys.global_settings.load()
+            hostname = settings.hostname
+            hostname_clean = re.compile('[a-zA-Z,\d\_\-]+')
+            self.hostname_clean = hostname_clean.findall(hostname)
+            self.hostname = self.hostname_clean[0] + "-" + current_date
+            print("\n-----------------------------------------------------")
+            print(f"Successfully logged into {self.hostname_clean[0]}.")
+            print("-----------------------------------------------------\n")
+            F5.create_and_download_file(self)            
         
     def create_and_download_file(self):
         """This function creates a UCS archive on an F5 and downloads it locally"""
@@ -107,6 +107,20 @@ class F5():
         print(f"UCS archive {self.hostname}.ucs has been deleted from local storage.\n")    
         os.remove(f"{self.hostname}.ucs")
 
-F5_USERNAME = GetSecret("tactical-f5-user").secret_value
-F5_PASSWORD = GetSecret("tactical-f5-pw").secret_value
-F5(F5_USERNAME, F5_PASSWORD)
+
+if __name__ == "__main__":
+
+    F5_USERNAME = GetSecret("tactical-f5-user").secret_value
+    F5_PASSWORD = GetSecret("tactical-f5-pw").secret_value
+    devices = GetSecret("tactical-f5-list").secret_value
+    devices = devices.split(",")
+
+    for device in devices:
+        my_thread = threading.Thread(target=F5, args=((F5_USERNAME, F5_PASSWORD, device)))
+        my_thread.start()
+
+    main_thread = threading.currentThread()
+    for some_thread in threading.enumerate():
+        if some_thread != main_thread:
+            print(some_thread)
+            some_thread.join()
