@@ -106,7 +106,7 @@ class F5():
                 
         print(f"UCS archive {self.hostname}.ucs has been deleted from local storage.\n")    
         os.remove(f"{self.hostname}.ucs")
-
+        thread.exit()
 
 if __name__ == "__main__":
 
