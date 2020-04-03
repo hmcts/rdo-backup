@@ -116,7 +116,7 @@ if __name__ == "__main__":
     devices = devices.split(",")
 
     for device in devices:
-        my_thread = threading.Thread(target=F5, args=((F5_USERNAME, F5_PASSWORD, device)))
+        my_thread = threading.Thread(target=F5, args=(F5_USERNAME, F5_PASSWORD, device))
         my_thread.start()
 
     main_thread = threading.currentThread()
