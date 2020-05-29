@@ -11,6 +11,11 @@ import urllib3
 import threading
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
+F5_USERNAME = GetSecret("tactical-f5-user").secret_value
+F5_PASSWORD = GetSecret("tactical-f5-pw").secret_value
+devices = GetSecret("tactical-f5-list").secret_value
+devices = devices.split(",")
+
 class F5():
     """This class is used to interact with an F5 appliance"""
 
@@ -21,7 +26,10 @@ class F5():
         self.hostname = hostname
 
         F5.connect_to_f5(self)
-
+        F5.create_and_download_file(self) 
+        F5.upload_file(self)
+        F5.clean_up(self)
+        
     def connect_to_f5(self):
         """This function creates connects to the F5 appliance using the F5 SDK"""
         
@@ -50,8 +58,7 @@ class F5():
             self.hostname = self.hostname_clean[0] + "-" + current_date
             print("\n-----------------------------------------------------")
             print(f"Successfully logged into {self.hostname_clean[0]}.")
-            print("-----------------------------------------------------\n")
-            F5.create_and_download_file(self)            
+            print("-----------------------------------------------------\n")           
         
     def create_and_download_file(self):
         """This function creates a UCS archive on an F5 and downloads it locally"""
@@ -78,14 +85,12 @@ class F5():
         print(f"\nDownloading UCS archive {self.hostname}.ucs...")
         self.mgmt.shared.file_transfer.ucs_downloads.download_file(f'{self.hostname}.ucs', f'{self.hostname}.ucs')
         print(f"UCS archive {self.hostname}.ucs has been downloaded locally.\n")
-        F5.upload_file(self)
 
     def upload_file(self):
         """This function calls the UploadToBlob class to upload the UCS file to an Azure storage blob"""
 
         # Upload the file to an Azure Storage Blob using the UploadToBlob class.
         UploadToBlob.upload_file(UploadToBlob(), f"{self.hostname}.ucs")
-        F5.clean_up(self)
 
     def clean_up(self):
         """This function performs clean up activities"""
@@ -110,11 +115,6 @@ class F5():
         sys.exit()
 
 if __name__ == "__main__":
-
-    F5_USERNAME = GetSecret("tactical-f5-user").secret_value
-    F5_PASSWORD = GetSecret("tactical-f5-pw").secret_value
-    devices = GetSecret("tactical-f5-list").secret_value
-    devices = devices.split(",")
 
     for device in devices:
         my_thread = threading.Thread(target=F5, args=(F5_USERNAME, F5_PASSWORD, device))
