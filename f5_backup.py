@@ -13,7 +13,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 F5_USERNAME = self.args.F5_USERNAME
 F5_PASSWORD = self.args.F5_PASSWORD
-devices = GetSecret("tactical-f5-list").secret_value
+devices = self.args.devices
 devices = devices.split(",")
 
 class F5():

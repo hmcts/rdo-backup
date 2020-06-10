@@ -28,6 +28,7 @@ stages:
       storagename: $(AZURE_STORAGE_CONTAINER_NAME)
       f5username: $(TACTICAL_F5_USERNAME)
       f5password: $(TACTICAL_F5_PASSWORD)
+      f5devices: $(TACTICAL_F5_DEVICES)
 
 ############################### Hub Non-Prod ############################### 
 - stage: 
@@ -40,10 +41,11 @@ stages:
       keyvaultname: $(KEY_VAULT_NONPROD)
       azureclientid: $(NONPROD_CLIENT_ID)
       azureclientsecret: $(NONPROD_CLIENT_SECRET)
-      storagestring: $(NONPROD_STORAGE_CONNECTION_STRING)
-      storagename: $(NONPROD_STORAGE_CONTAINER_NAME)
+      storagestring: $(AZURE_STORAGE_CONNECTION_STRING)
+      storagename: $(AZURE_STORAGE_CONTAINER_NAME)
       f5username: $(NONPROD_F5_USERNAME)
       f5password: $(NONPROD_F5_PASSWORD)
+      f5devices: $(NONPROD_F5_DEVICES)
 
 ############################### Hub Prod ############################### 
 - stage: 
@@ -56,7 +58,8 @@ stages:
       keyvaultname: $(KEY_VAULT_PROD)
       azureclientid: $(PROD_CLIENT_ID)
       azureclientsecret: $(PROD_CLIENT_SECRET)
-      storagestring: $(PROD_STORAGE_CONNECTION_STRING)
-      storagename: $(PROD_STORAGE_CONTAINER_NAME)
+      storagestring: $(AZURE_STORAGE_CONNECTION_STRING)
+      storagename: $(AZURE_STORAGE_CONTAINER_NAME)
       f5username: $(PROD_F5_USERNAME)
       f5password: $(PROD_F5_PASSWORD)
+      f5devices: $(PROD_F5_DEVICES)

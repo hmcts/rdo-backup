@@ -15,6 +15,7 @@ class Parser():
         parser.add_argument("--AZURE_STORAGE_CONTAINER_NAME")
         parser.add_argument("--F5_USERNAME")
         parser.add_argument("--F5_PASSWORD")
+        parser.add_argument("--devices")
         self.args = parser.parse_args()
         os.environ["AZURE_CLIENT_ID"] = self.args.AZURE_CLIENT_ID
         os.environ["AZURE_CLIENT_SECRET"] = self.args.AZURE_CLIENT_SECRET
