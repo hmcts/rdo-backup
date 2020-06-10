@@ -26,6 +26,8 @@ stages:
       azureclientsecret: $(NONPROD_CLIENT_SECRET)
       storagestring: $(NONPROD_STORAGE_CONNECTION_STRING)
       storagename: $(NONPROD_STORAGE_CONTAINER_NAME)
+      f5username:
+      f5password:
 
 ############################### Hub Non-Prod ############################### 
 - stage: 
@@ -40,6 +42,8 @@ stages:
       azureclientsecret: $(NONPROD_CLIENT_SECRET)
       storagestring: $(NONPROD_STORAGE_CONNECTION_STRING)
       storagename: $(NONPROD_STORAGE_CONTAINER_NAME)
+      f5username:
+      f5password:
 
 ############################### Hub Prod ############################### 
 - stage: 
@@ -54,3 +58,5 @@ stages:
       azureclientsecret: $(PROD_CLIENT_SECRET)
       storagestring: $(PROD_STORAGE_CONNECTION_STRING)
       storagename: $(PROD_STORAGE_CONTAINER_NAME)
+      f5username:
+      f5password:
