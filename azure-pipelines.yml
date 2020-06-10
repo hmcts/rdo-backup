@@ -13,9 +13,23 @@ stages:
   jobs:
   - template: steps/copy-files.yml
 
-############################### Non-Prod ############################### 
+############################### Tactical Mgmt ############################### 
 - stage: 
-  displayName: Non-Prod
+  displayName: Tactical Mgmt
+  dependsOn: copy-files
+  condition: succeeded('copy-filesk')
+  jobs:
+  - template: steps/f5-backup.yml
+    parameters:
+      keyvaultname: $(KEY_VAULT_NAME)
+      azureclientid: $(AZURE_CLIENT_ID)
+      azureclientsecret: $(NONPROD_CLIENT_SECRET)
+      storagestring: $(NONPROD_STORAGE_CONNECTION_STRING)
+      storagename: $(NONPROD_STORAGE_CONTAINER_NAME)
+
+############################### Hub Non-Prod ############################### 
+- stage: 
+  displayName: Hub Non-Prod
   dependsOn: copy-files
   condition: succeeded('copy-filesk')
   jobs:
@@ -27,9 +41,9 @@ stages:
       storagestring: $(NONPROD_STORAGE_CONNECTION_STRING)
       storagename: $(NONPROD_STORAGE_CONTAINER_NAME)
 
-############################### Prod ############################### 
+############################### Hub Prod ############################### 
 - stage: 
-  displayName: Prod
+  displayName: Hub Prod
   dependsOn: copy-files
   condition: succeeded('copy-filesk')
   jobs:

@@ -11,8 +11,8 @@ import urllib3
 import threading
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-F5_USERNAME = GetSecret("tactical-f5-user").secret_value
-F5_PASSWORD = GetSecret("tactical-f5-pw").secret_value
+F5_USERNAME = self.args.F5_USERNAME
+F5_PASSWORD = self.args.F5_PASSWORD
 devices = GetSecret("tactical-f5-list").secret_value
 devices = devices.split(",")
 
