@@ -1,5 +1,4 @@
 jobs:
-
 - job:
   pool:
     name: rdo-backup-prod
