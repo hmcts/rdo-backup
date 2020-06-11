@@ -6,6 +6,7 @@ from f5.bigip import ManagementRoot
 from icontrol.exceptions import iControlUnexpectedHTTPError
 from requests import ConnectionError
 from keyvault import GetSecret
+from variables import Parser
 from upload_to_blob import UploadToBlob
 import urllib3
 import threading
