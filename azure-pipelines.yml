@@ -8,16 +8,16 @@ pr:
 stages:
 
 
-- stage: copy-files
+- stage: copy_files
   displayName: Copy Python Files
   jobs:
-  - template: steps/copy-files.yml
+  - template: steps/copy_files.yml
 
 ############################### Tactical Mgmt ############################### 
 - stage: 
   displayName: Tactical Mgmt
-  dependsOn: copy-files
-  condition: succeeded('copy-filesk')
+  dependsOn: copy_files
+  condition: succeeded('copy_files')
   jobs:
   - template: steps/f5-backup.yml
     parameters:
@@ -33,8 +33,8 @@ stages:
 ############################### Hub Non-Prod ############################### 
 - stage: 
   displayName: Hub Non-Prod
-  dependsOn: copy-files
-  condition: succeeded('copy-filesk')
+  dependsOn: copy_files
+  condition: succeeded('copy_filesk')
   jobs:
   - template: steps/f5-backup.yml
     parameters:
@@ -50,8 +50,8 @@ stages:
 ############################### Hub Prod ############################### 
 - stage: 
   displayName: Hub Prod
-  dependsOn: copy-files
-  condition: succeeded('copy-filesk')
+  dependsOn: copy_files
+  condition: succeeded('copy_filesk')
   jobs:
   - template: steps/f5-backup.yml
     parameters:
