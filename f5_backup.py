@@ -26,8 +26,8 @@ class F5():
         self.devices = self.devices.split(",")
 
         for device in self.devices:
-        my_thread = threading.Thread(target=F5, args=(self.username, self.password, device))
-        my_thread.start()
+            my_thread = threading.Thread(target=F5, args=(self.username, self.password, device))
+            my_thread.start()
     main_thread = threading.currentThread()
     for some_thread in threading.enumerate():
         if some_thread != main_thread:
