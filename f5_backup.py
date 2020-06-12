@@ -13,8 +13,7 @@ import threading
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
-F5_USERNAME = self.args.F5_USERNAME
-F5_PASSWORD = self.args.F5_PASSWORD
+
 devices = self.args.devices
 devices = devices.split(",")
 
@@ -27,6 +26,17 @@ class F5():
         self.username = self.args.F5_USERNAME
         self.password = self.args.F5_PASSWORD
         self.hostname = hostname
+        devices = self.args.devices
+        devices = devices.split(",")
+
+    for device in self.devices:
+        my_thread = threading.Thread(target=F5, args=(self.username, self.password, device))
+        my_thread.start()
+    main_thread = threading.currentThread()
+    for some_thread in threading.enumerate():
+        if some_thread != main_thread:
+            print(some_thread)
+            some_thread.join()
 
         F5.connect_to_f5(self)
         F5.create_and_download_file(self) 
@@ -117,14 +127,5 @@ class F5():
         os.remove(f"{self.hostname}.ucs")
         sys.exit()
 
-if __name__ == "__main__":
-
-    for device in devices:
-        my_thread = threading.Thread(target=F5, args=(F5_USERNAME, F5_PASSWORD, device))
-        my_thread.start()
-
-    main_thread = threading.currentThread()
-    for some_thread in threading.enumerate():
-        if some_thread != main_thread:
-            print(some_thread)
-            some_thread.join()
+    if __name__ == "__main__":
+    F5()
