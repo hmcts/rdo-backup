@@ -124,5 +124,5 @@ class F5():
         os.remove(f"{self.hostname}.ucs")
         sys.exit()
 
-    if __name__ == "__main__":
-      F5()
+if __name__ == "__main__":
+    F5()
