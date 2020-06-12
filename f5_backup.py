@@ -23,7 +23,7 @@ class F5():
         self.password = self.args.F5_PASSWORD
         self.hostname = hostname
         self.devices = self.args.devices
-        devices = devices.split(",")
+        self.devices = devices.split(",")
 
     for device in self.devices:
         my_thread = threading.Thread(target=F5, args=(self.username, self.password, device))
