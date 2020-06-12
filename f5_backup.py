@@ -13,10 +13,6 @@ import threading
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
-
-devices = self.args.devices
-devices = devices.split(",")
-
 class F5():
     """This class is used to interact with an F5 appliance"""
 
