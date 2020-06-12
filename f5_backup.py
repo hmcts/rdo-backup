@@ -22,7 +22,7 @@ class F5():
         self.username = self.args.F5_USERNAME
         self.password = self.args.F5_PASSWORD
         self.hostname = hostname
-        devices = self.args.devices
+        self.devices = self.args.devices
         devices = devices.split(",")
 
     for device in self.devices:
