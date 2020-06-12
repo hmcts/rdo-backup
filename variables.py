@@ -17,9 +17,10 @@ class Parser():
         parser.add_argument("--F5_PASSWORD")
         parser.add_argument("--DEVICES")
         self.args = parser.parse_args()
-        self.args.AZURE_CLIENT_ID = os.environ["AZURE_CLIENT_ID"]
-        self.args.AZURE_CLIENT_SECRET = os.environ["AZURE_CLIENT_SECRET"]
-        self.args.AZURE_TENANT_ID = os.environ["AZURE_TENANT_ID"]
-        self.args.DEVICES = os.environ["devices"]
-        self.args.F5_USERNAME = os.environ["F5_USERNAME"]
-        self.args.F5_PASSWORD = os.environ["F5_PASSWORD"]
+        os.environ["AZURE_CLIENT_ID"] = self.args.AZURE_CLIENT_ID 
+        os.environ["AZURE_CLIENT_SECRET"] = self.args.AZURE_CLIENT_SECRET
+        os.environ["AZURE_TENANT_ID"] = self.args.AZURE_TENANT_ID
+        os.environ["devices"] = self.args.DEVICES
+        os.environ["F5_USERNAME"] = self.args.F5_USERNAME
+        os.environ["F5_PASSWORD"] = self.args.F5_PASSWORD
+        
