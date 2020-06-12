@@ -16,38 +16,22 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 class F5():
     """This class is used to interact with an F5 appliance"""
 
-    def __init__(self, username="", password="", hostname="", devices=""):
+    def __init__(self, username="", password="", hostname=""):
         """Initializes the F5 class"""
         Parser.parse_var(self)
         self.username = self.args.F5_USERNAME
         self.password = self.args.F5_PASSWORD
-        self.hostname = hostname
-        self.devices = self.args.DEVICES
-        self.devices = self.devices.split(",")
+        self.hostname = self.args.DEVICES
+        self.hostname = self.hostname.split(",")
 
-        for device in self.devices:
-            my_thread = threading.Thread(target=F5, args=(self.username, self.password, device))
-            my_thread.start()
-
-            main_thread = threading.currentThread()
-            for some_thread in threading.enumerate():
-                if some_thread != main_thread:
-                    print(some_thread)
-                    some_thread.join()
-
-            F5.connect_to_f5(self)
-            F5.create_and_download_file(self) 
-            F5.upload_file(self)
-            F5.clean_up(self)
-        
     def connect_to_f5(self):
         """This function creates connects to the F5 appliance using the F5 SDK"""
         
         # Retrieve device list from a key vault secret and put them into a list
-    
+
         try:
             # Connect to the BigIP
-            self.mgmt = ManagementRoot(self.hostname, self.username, self.password, port=8443, verify=False)
+            self.mgmt = ManagementRoot(self.device, self.username, self.password, port=8443, verify=False)
 
         except iControlUnexpectedHTTPError:
             print(f"Failed to login to the F5 appliance, please verify your credentials.")
@@ -125,4 +109,20 @@ class F5():
         sys.exit()
 
 if __name__ == "__main__":
-    F5()
+    self = F5()
+
+    for self.device in self.hostname:
+        my_thread = threading.Thread(target=F5, args=(self.username, self.password, self.device))
+        my_thread.start()
+
+        F5.connect_to_f5(self)
+        F5.create_and_download_file(self) 
+        F5.upload_file(self)
+        F5.clean_up(self)
+        
+        main_thread = threading.currentThread()
+        for some_thread in threading.enumerate():
+            if some_thread != main_thread:
+                print(some_thread)
+                some_thread.join()
+
