@@ -12,7 +12,6 @@ import urllib3
 import threading
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-Parser.parse_var(self)
 
 F5_USERNAME = self.args.F5_USERNAME
 F5_PASSWORD = self.args.F5_PASSWORD
@@ -24,6 +23,7 @@ class F5():
 
     def __init__(self, username, password, hostname=""):
         """Initializes the F5 class"""
+        Parser.parse_var(self)
         self.username = username
         self.password = password
         self.hostname = hostname
