@@ -24,8 +24,8 @@ class F5():
     def __init__(self, username, password, hostname=""):
         """Initializes the F5 class"""
         Parser.parse_var(self)
-        self.username = username
-        self.password = password
+        self.username = self.args.F5_USERNAME
+        self.password = self.args.F5_PASSWORD
         self.hostname = hostname
 
         F5.connect_to_f5(self)
