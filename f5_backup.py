@@ -35,10 +35,10 @@ class F5():
                     print(some_thread)
                     some_thread.join()
 
-                        F5.connect_to_f5(self)
-                        F5.create_and_download_file(self) 
-                        F5.upload_file(self)
-                        F5.clean_up(self)
+        F5.connect_to_f5(self)
+        F5.create_and_download_file(self) 
+        F5.upload_file(self)
+        F5.clean_up(self)
         
     def connect_to_f5(self):
         """This function creates connects to the F5 appliance using the F5 SDK"""
