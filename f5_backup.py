@@ -28,16 +28,17 @@ class F5():
         for device in self.devices:
             my_thread = threading.Thread(target=F5, args=(self.username, self.password, device))
             my_thread.start()
-    main_thread = threading.currentThread()
-    for some_thread in threading.enumerate():
-        if some_thread != main_thread:
-            print(some_thread)
-            some_thread.join()
 
-        F5.connect_to_f5(self)
-        F5.create_and_download_file(self) 
-        F5.upload_file(self)
-        F5.clean_up(self)
+            main_thread = threading.currentThread()
+            for some_thread in threading.enumerate():
+                if some_thread != main_thread:
+                    print(some_thread)
+                    some_thread.join()
+
+                        F5.connect_to_f5(self)
+                        F5.create_and_download_file(self) 
+                        F5.upload_file(self)
+                        F5.clean_up(self)
         
     def connect_to_f5(self):
         """This function creates connects to the F5 appliance using the F5 SDK"""
