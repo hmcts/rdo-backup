@@ -34,7 +34,7 @@ stages:
 - stage: 
   displayName: Hub Non-Prod
   dependsOn: copy_files
-  condition: succeeded('copy_filesk')
+  condition: succeeded('copy_files')
   jobs:
   - template: steps/f5-backup.yml
     parameters:
@@ -51,7 +51,7 @@ stages:
 - stage: 
   displayName: Hub Prod
   dependsOn: copy_files
-  condition: succeeded('copy_filesk')
+  condition: succeeded('copy_files')
   jobs:
   - template: steps/f5-backup.yml
     parameters:
