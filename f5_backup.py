@@ -12,17 +12,21 @@ import urllib3
 import threading
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-
 class F5():
     """This class is used to interact with an F5 appliance"""
 
     def __init__(self, username="", password="", hostname=""):
         """Initializes the F5 class"""
         Parser.parse_var(self)
-        self.username = self.args.F5_USERNAME
-        self.password = self.args.F5_PASSWORD
-        self.hostname = self.args.DEVICES
-        self.hostname = self.hostname.split(",")
+        self.username = username
+        self.password = password
+        self.hostname = hostname
+
+        F5.connect_to_f5(self)
+        F5.create_and_download_file(self) 
+        F5.upload_file(self)
+        F5.clean_up(self)
+
 
     def connect_to_f5(self):
         """This function creates connects to the F5 appliance using the F5 SDK"""
@@ -31,7 +35,7 @@ class F5():
 
         try:
             # Connect to the BigIP
-            self.mgmt = ManagementRoot(self.device, self.username, self.password, port=8443, verify=False)
+            self.mgmt = ManagementRoot(self.hostname, self.username, self.password, port=8443, verify=False)
 
         except iControlUnexpectedHTTPError:
             print(f"Failed to login to the F5 appliance, please verify your credentials.")
@@ -106,22 +110,23 @@ class F5():
                 
         print(f"UCS archive {self.hostname}.ucs has been deleted from local storage.\n")    
         os.remove(f"{self.hostname}.ucs")
-        sys.exit()
 
 if __name__ == "__main__":
-    self = F5()
 
-    for self.device in self.hostname:
-        my_thread = threading.Thread(target=F5)
+    self = Parser()
+    init = Parser.parse_var(self)
+    username = self.args.F5_USERNAME
+    password = self.args.F5_PASSWORD
+    devices = self.args.DEVICES
+    devices = devices.split(",")
+
+    for device in devices:
+        my_thread = threading.Thread(target=F5, args=(username, password, device))
         my_thread.start()
-
-        F5.connect_to_f5(self)
-        F5.create_and_download_file(self) 
-        F5.upload_file(self)
-        F5.clean_up(self)
 
     main_thread = threading.currentThread()
     for some_thread in threading.enumerate():
         if some_thread != main_thread:
             print(some_thread)
             some_thread.join()
+
