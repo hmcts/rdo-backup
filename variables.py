@@ -23,4 +23,3 @@ class Parser():
         os.environ["devices"] = self.args.DEVICES
         os.environ["F5_USERNAME"] = self.args.F5_USERNAME
         os.environ["F5_PASSWORD"] = self.args.F5_PASSWORD
-        

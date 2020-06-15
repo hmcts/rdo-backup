@@ -53,7 +53,7 @@ class F5():
             print("\n-----------------------------------------------------")
             print(f"Successfully logged into {self.hostname_clean[0]}.")
             print("-----------------------------------------------------\n")           
-        
+
     def create_and_download_file(self):
         """This function creates a UCS archive on an F5 and downloads it locally"""
         try:
@@ -112,17 +112,16 @@ if __name__ == "__main__":
     self = F5()
 
     for self.device in self.hostname:
-        my_thread = threading.Thread(target=F5, args=(self.username, self.password, self.device))
+        my_thread = threading.Thread(target=F5)
         my_thread.start()
 
         F5.connect_to_f5(self)
         F5.create_and_download_file(self) 
         F5.upload_file(self)
         F5.clean_up(self)
-        
-        main_thread = threading.currentThread()
-        for some_thread in threading.enumerate():
-            if some_thread != main_thread:
-                print(some_thread)
-                some_thread.join()
 
+    main_thread = threading.currentThread()
+    for some_thread in threading.enumerate():
+        if some_thread != main_thread:
+            print(some_thread)
+            some_thread.join()
