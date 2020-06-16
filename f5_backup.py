@@ -21,6 +21,7 @@ class F5():
         self.username = username
         self.password = password
         self.hostname = hostname
+        self.port = port
 
         F5.connect_to_f5(self)
         F5.create_and_download_file(self) 
@@ -35,7 +36,7 @@ class F5():
 
         try:
             # Connect to the BigIP
-            self.mgmt = ManagementRoot(self.hostname, self.username, self.password, port=8443, verify=False)
+            self.mgmt = ManagementRoot(self.hostname, self.username, self.password, self.port, verify=False)
 
         except iControlUnexpectedHTTPError:
             print(f"Failed to login to the F5 appliance, please verify your credentials.")
@@ -117,6 +118,7 @@ if __name__ == "__main__":
     init = Parser.parse_var(self)
     username = self.args.F5_USERNAME
     password = self.args.F5_PASSWORD
+    port = self.args.F5_PORT                  
     devices = self.args.DEVICES
     devices = devices.split(",")
 
