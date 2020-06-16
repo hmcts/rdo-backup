@@ -15,7 +15,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 class F5():
     """This class is used to interact with an F5 appliance"""
 
-    def __init__(self, username="", password="", hostname="",port=""):
+    def __init__(self, username="", password="", hostname="", port=""):
         """Initializes the F5 class"""
         Parser.parse_var(self)
         self.username = username
