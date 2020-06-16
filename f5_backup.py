@@ -15,7 +15,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 class F5():
     """This class is used to interact with an F5 appliance"""
 
-    def __init__(self, username="", password="", hostname=""):
+    def __init__(self, username="", password="", hostname="",port=""):
         """Initializes the F5 class"""
         Parser.parse_var(self)
         self.username = username
@@ -123,7 +123,7 @@ if __name__ == "__main__":
     devices = devices.split(",")
 
     for device in devices:
-        my_thread = threading.Thread(target=F5, args=(username, password, device))
+        my_thread = threading.Thread(target=F5, args=(username, password, device, port))
         my_thread.start()
 
     main_thread = threading.currentThread()
