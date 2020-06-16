@@ -11,5 +11,5 @@ jobs:
     inputs:
       scriptSource: 'filePath'
       scriptPath: f5_backup.py
-      arguments: --KEY_VAULT_NAME ${{ parameters.keyvaultname }} --AZURE_TENANT_ID $(AZURE_TENANT_ID) --AZURE_CLIENT_ID ${{ parameters.azureclientid }} --AZURE_CLIENT_SECRET ${{ parameters.azureclientsecret }} --AZURE_STORAGE_CONNECTION_STRING ${{ parameters.storagestring }} --AZURE_STORAGE_CONTAINER_NAME ${{ parameters.storagename }} --F5_USERNAME ${{ parameters.f5username }} --F5_PASSWORD ${{ parameters.f5password }} --DEVICES ${{ parameters.f5devices }}
+      arguments: --KEY_VAULT_NAME ${{ parameters.keyvaultname }} --AZURE_TENANT_ID $(AZURE_TENANT_ID) --AZURE_CLIENT_ID ${{ parameters.azureclientid }} --AZURE_CLIENT_SECRET ${{ parameters.azureclientsecret }} --AZURE_STORAGE_CONNECTION_STRING ${{ parameters.storagestring }} --AZURE_STORAGE_CONTAINER_NAME ${{ parameters.storagename }} --F5_USERNAME ${{ parameters.f5username }} --F5_PASSWORD ${{ parameters.f5password }} --DEVICES ${{ parameters.f5devices }}  --F5_PORT ${{ parameters.f5port }}
       workingDirectory: $(Build.ArtifactStagingDirectory)
