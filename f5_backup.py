@@ -6,38 +6,37 @@ from f5.bigip import ManagementRoot
 from icontrol.exceptions import iControlUnexpectedHTTPError
 from requests import ConnectionError
 from keyvault import GetSecret
+from variables import Parser
 from upload_to_blob import UploadToBlob
 import urllib3
 import threading
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-F5_USERNAME = GetSecret("tactical-f5-user").secret_value
-F5_PASSWORD = GetSecret("tactical-f5-pw").secret_value
-devices = GetSecret("tactical-f5-list").secret_value
-devices = devices.split(",")
-
 class F5():
     """This class is used to interact with an F5 appliance"""
 
-    def __init__(self, username, password, hostname=""):
+    def __init__(self, username="", password="", hostname="", port=""):
         """Initializes the F5 class"""
+        Parser.parse_var(self)
         self.username = username
         self.password = password
         self.hostname = hostname
+        self.port = port
 
         F5.connect_to_f5(self)
         F5.create_and_download_file(self) 
         F5.upload_file(self)
         F5.clean_up(self)
-        
+
+
     def connect_to_f5(self):
         """This function creates connects to the F5 appliance using the F5 SDK"""
         
         # Retrieve device list from a key vault secret and put them into a list
-    
+
         try:
             # Connect to the BigIP
-            self.mgmt = ManagementRoot(self.hostname, self.username, self.password, port=8443, verify=False)
+            self.mgmt = ManagementRoot(self.hostname, self.username, self.password, port=self.port, verify=False)
 
         except iControlUnexpectedHTTPError:
             print(f"Failed to login to the F5 appliance, please verify your credentials.")
@@ -59,7 +58,7 @@ class F5():
             print("\n-----------------------------------------------------")
             print(f"Successfully logged into {self.hostname_clean[0]}.")
             print("-----------------------------------------------------\n")           
-        
+
     def create_and_download_file(self):
         """This function creates a UCS archive on an F5 and downloads it locally"""
         try:
@@ -112,12 +111,19 @@ class F5():
                 
         print(f"UCS archive {self.hostname}.ucs has been deleted from local storage.\n")    
         os.remove(f"{self.hostname}.ucs")
-        sys.exit()
 
 if __name__ == "__main__":
 
+    self = Parser()
+    init = Parser.parse_var(self)
+    username = self.args.F5_USERNAME
+    password = self.args.F5_PASSWORD
+    port = self.args.F5_PORT                  
+    devices = self.args.DEVICES
+    devices = devices.split(",")
+
     for device in devices:
-        my_thread = threading.Thread(target=F5, args=(F5_USERNAME, F5_PASSWORD, device))
+        my_thread = threading.Thread(target=F5, args=(username, password, device, port))
         my_thread.start()
 
     main_thread = threading.currentThread()
@@ -125,3 +131,4 @@ if __name__ == "__main__":
         if some_thread != main_thread:
             print(some_thread)
             some_thread.join()
+

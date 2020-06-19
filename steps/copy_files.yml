@@ -1,0 +1,14 @@
+jobs:
+- job:
+  pool:
+      name: rdo-backup-prod
+      vmImage: Ubuntu-18.04
+
+  steps:
+
+  - task: CopyFiles@1
+    displayName: Copy Python files
+    inputs:
+      contents: '**'
+      TargetFolder: $(Build.ArtifactStagingDirectory)
+      cleanTargetFolder: true
