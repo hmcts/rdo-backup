@@ -30,39 +30,3 @@ stages:
       f5password: $(TACTICAL_F5_PASSWORD)
       f5devices: $(TACTICAL_F5_DEVICES)
       f5port: $(TACTICAL_F5_PORT)
-
-############################### Hub Non-Prod ############################### 
-- stage: 
-  displayName: Hub Non-Prod
-  dependsOn: copy_files
-  condition: succeeded('copy_files')
-  jobs:
-  - template: steps/f5-backup.yml
-    parameters:
-      keyvaultname: $(KEY_VAULT_NONPROD)
-      azureclientid: $(NONPROD_CLIENT_ID)
-      azureclientsecret: $(NONPROD_CLIENT_SECRET)
-      storagestring: $(AZURE_STORAGE_CONNECTION_STRING)
-      storagename: $(AZURE_STORAGE_CONTAINER_NAME)
-      f5username: $(NONPROD_F5_USERNAME)
-      f5password: $(NONPROD_F5_PASSWORD)
-      f5devices: $(NONPROD_F5_DEVICES)
-      f5port: $(NONPROD_F5_PORT)
-
-############################### Hub Prod ############################### 
-- stage: 
-  displayName: Hub Prod
-  dependsOn: copy_files
-  condition: succeeded('copy_files')
-  jobs:
-  - template: steps/f5-backup.yml
-    parameters:
-      keyvaultname: $(KEY_VAULT_PROD)
-      azureclientid: $(PROD_CLIENT_ID)
-      azureclientsecret: $(PROD_CLIENT_SECRET)
-      storagestring: $(AZURE_STORAGE_CONNECTION_STRING)
-      storagename: $(AZURE_STORAGE_CONTAINER_NAME)
-      f5username: $(PROD_F5_USERNAME)
-      f5password: $(PROD_F5_PASSWORD)
-      f5devices: $(PROD_F5_DEVICES)
-      f5port: $(PROD_F5_PORT)
