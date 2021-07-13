@@ -1,32 +1,30 @@
 trigger:
-- master
-- dev
+  - master
+  - dev
 
 pr:
-- master
+  - master
 
 stages:
+  - stage: copy_files
+    displayName: Copy Python Files
+    jobs:
+      - template: steps/copy_files.yml
 
-
-- stage: copy_files
-  displayName: Copy Python Files
-  jobs:
-  - template: steps/copy_files.yml
-
-############################### Tactical Mgmt ############################### 
-- stage: 
-  displayName: Tactical Mgmt
-  dependsOn: copy_files
-  condition: succeeded('copy_files')
-  jobs:
-  - template: steps/f5-backup.yml
-    parameters:
-      keyvaultname: $(KEY_VAULT_NAME)
-      azureclientid: $(AZURE_CLIENT_ID)
-      azureclientsecret: $(AZURE_CLIENT_SECRET)
-      storagestring: $(AZURE_STORAGE_CONNECTION_STRING)
-      storagename: $(AZURE_STORAGE_CONTAINER_NAME)
-      f5username: $(TACTICAL_F5_USERNAME)
-      f5password: $(TACTICAL_F5_PASSWORD)
-      f5devices: $(TACTICAL_F5_DEVICES)
-      f5port: $(TACTICAL_F5_PORT)
+  ############################### Tactical Mgmt ###############################
+  - stage: tactical_mgmt
+    displayName: Tactical Mgmt
+    dependsOn: copy_files
+    condition: succeeded('copy_files')
+    jobs:
+      - template: steps/f5-backup.yml
+        parameters:
+          keyvaultname: $(KEY_VAULT_NAME)
+          azureclientid: $(AZURE_CLIENT_ID)
+          azureclientsecret: $(AZURE_CLIENT_SECRET)
+          storagestring: $(AZURE_STORAGE_CONNECTION_STRING)
+          storagename: $(AZURE_STORAGE_CONTAINER_NAME)
+          f5username: $(TACTICAL_F5_USERNAME)
+          f5password: $(TACTICAL_F5_PASSWORD)
+          f5devices: $(TACTICAL_F5_DEVICES)
+          f5port: $(TACTICAL_F5_PORT)
