@@ -5,6 +5,12 @@ jobs:
       vmImage: Ubuntu-18.04
 
     steps:
+      - task: DownloadPipelineArtifact@1
+        inputs:
+          source: "current"
+          artifact: "drop"
+          path: "$(Build.ArtifactStagingDirectory)"
+
       - task: AzureCLI@2
         displayName: Execute Python script
         inputs:
