@@ -9,7 +9,7 @@ jobs:
         displayName: Execute Python script
         inputs:
           azureSubscription: Reform-CFT-Prod
-          workingDirectory: $(Build.ArtifactStagingDirectory)
+          workingDirectory: $(Build.ArtifactStagingDirectory)/drop
           scriptType: bash
           scriptLocation: inlineScript
           inlineScript: |
@@ -18,5 +18,5 @@ jobs:
             python3 -m venv rdo-backup
             . ./rdo-backup/bin/activate
             python3 -m pip install -U pip
-            pip install --upgrade -r $(Build.ArtifactStagingDirectory)/requirements.txt
-            python3 $(Build.ArtifactStagingDirectory)/f5_backup.py --KEY_VAULT_NAME ${{ parameters.keyvaultname }} --AZURE_TENANT_ID $(AZURE_TENANT_ID) --AZURE_CLIENT_ID ${{ parameters.azureclientid }} --AZURE_CLIENT_SECRET ${{ parameters.azureclientsecret }} --AZURE_STORAGE_CONNECTION_STRING ${{ parameters.storagestring }} --AZURE_STORAGE_CONTAINER_NAME ${{ parameters.storagename }} --F5_USERNAME ${{ parameters.f5username }} --F5_PASSWORD ${{ parameters.f5password }} --DEVICES ${{ parameters.f5devices }}  --F5_PORT ${{ parameters.f5port }}
+            pip install --upgrade -r $(Build.ArtifactStagingDirectory)/drop/requirements.txt
+            python3 $(Build.ArtifactStagingDirectory)/drop/f5_backup.py --KEY_VAULT_NAME ${{ parameters.keyvaultname }} --AZURE_TENANT_ID $(AZURE_TENANT_ID) --AZURE_CLIENT_ID ${{ parameters.azureclientid }} --AZURE_CLIENT_SECRET ${{ parameters.azureclientsecret }} --AZURE_STORAGE_CONNECTION_STRING ${{ parameters.storagestring }} --AZURE_STORAGE_CONTAINER_NAME ${{ parameters.storagename }} --F5_USERNAME ${{ parameters.f5username }} --F5_PASSWORD ${{ parameters.f5password }} --DEVICES ${{ parameters.f5devices }} --F5_PORT ${{ parameters.f5port }}
