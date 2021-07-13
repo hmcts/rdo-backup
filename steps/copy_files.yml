@@ -1,14 +1,18 @@
 jobs:
-- job:
-  pool:
+  - job:
+    pool:
       name: hmcts-cftptl-agent-pool
       vmImage: Ubuntu-18.04
 
-  steps:
+    steps:
+      - task: CopyFiles@1
+        displayName: Copy Python files
+        inputs:
+          contents: "**"
+          TargetFolder: $(Build.ArtifactStagingDirectory)
+          cleanTargetFolder: true
 
-  - task: CopyFiles@1
-    displayName: Copy Python files
-    inputs:
-      contents: '**'
-      TargetFolder: $(Build.ArtifactStagingDirectory)
-      cleanTargetFolder: true
+      - task: PublishPipelineArtifact@1
+        inputs:
+          artifactName: "drop"
+          targetPath: "$(Build.ArtifactStagingDirectory)"
