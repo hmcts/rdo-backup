@@ -1,6 +1,6 @@
 azure.core==1.16.0
 azure.identity==1.6.0
 azure.keyvault==4.1.0
-azure.storage==0.37.0
+azure.storage.blob==12.8.1
 f5-sdk==3.0.21
 requests==2.25.1
